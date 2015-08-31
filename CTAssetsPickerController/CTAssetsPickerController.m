@@ -97,7 +97,10 @@ NSString * const CTAssetsPickerDidDeselectAssetNotification = @"CTAssetsPickerDi
 
 - (void)dealloc
 {
+  @try{
     [self removeKeyValueObserver];
+  }@catch(id anException){
+  }
 }
 
 - (UIViewController *)childViewControllerForStatusBarStyle
