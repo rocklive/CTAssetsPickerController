@@ -457,7 +457,7 @@
     options.predicate       = self.picker.assetsFetchOptions.predicate; // aligned specified predicate
     options.sortDescriptors = @[[NSSortDescriptor sortDescriptorWithKey:@"creationDate" ascending:YES]];
     
-    PHFetchResult *result = [PHAsset fetchKeyAssetsInAssetCollection:collection options:options];
+    PHFetchResult *result = [PHAsset fetchAssetsInAssetCollection:collection options:options];
     
     NSUInteger location = 0;
     NSUInteger length   = (result.count < count) ? result.count : count;
