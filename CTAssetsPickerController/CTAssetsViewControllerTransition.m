@@ -48,7 +48,7 @@
 
 - (NSTimeInterval)transitionDuration:(id<UIViewControllerContextTransitioning>)transitionContext
 {
-    return 0.35f;
+    return 0.5f; //  Changed for VHS
 }
 
 - (void)animateTransition:(id<UIViewControllerContextTransitioning>)transitionContext

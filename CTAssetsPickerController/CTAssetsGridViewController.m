@@ -170,11 +170,12 @@ NSString * const CTAssetsGridViewFooterIdentifier = @"CTAssetsGridViewFooterIden
 
 - (void)setupButtons
 {
-    self.navigationItem.rightBarButtonItem =
-    [[UIBarButtonItem alloc] initWithTitle:CTAssetsPickerLocalizedString(@"Done", nil)
-                                     style:UIBarButtonItemStyleDone
-                                    target:self.picker
-                                    action:@selector(finishPickingAssets:)];
+    self.navigationItem.rightBarButtonItem = nil;
+    // Removed for VHS
+    //    [[UIBarButtonItem alloc] initWithTitle:CTAssetsPickerLocalizedString(@"Done", nil)
+    //                                     style:UIBarButtonItemStyleDone
+    //                                    target:self.picker
+    //                                    action:@selector(finishPickingAssets:)];
 }
 
 - (void)setupAssets
@@ -386,10 +387,11 @@ NSString * const CTAssetsGridViewFooterIdentifier = @"CTAssetsGridViewFooterIden
 
 - (void)addGestureRecognizer
 {
-    UILongPressGestureRecognizer *longPress =
-    [[UILongPressGestureRecognizer alloc] initWithTarget:self action:@selector(pushPageViewController:)];
-    
-    [self.collectionView addGestureRecognizer:longPress];
+    //  Removed for VHS
+    //    UILongPressGestureRecognizer *longPress =
+    //    [[UILongPressGestureRecognizer alloc] initWithTarget:self action:@selector(pushPageViewController:)];
+    //
+    //    [self.collectionView addGestureRecognizer:longPress];
 }
 
 
@@ -666,12 +668,20 @@ NSString * const CTAssetsGridViewFooterIdentifier = @"CTAssetsGridViewFooterIden
 
 - (void)collectionView:(UICollectionView *)collectionView didSelectItemAtIndexPath:(NSIndexPath *)indexPath
 {
-    PHAsset *asset = [self assetAtIndexPath:indexPath];
+    //  Removed for VHS
+    //  Uncomment for multiply selections
+    //    PHAsset *asset = [self assetAtIndexPath:indexPath];
+    //
+    //    [self.picker selectAsset:asset];
+    //
+    //    if ([self.picker.delegate respondsToSelector:@selector(assetsPickerController:didSelectAsset:)])
+    //        [self.picker.delegate assetsPickerController:self.picker didSelectAsset:asset];
     
-    [self.picker selectAsset:asset];
+    CTAssetsPageViewController *vc = [[CTAssetsPageViewController alloc] initWithFetchResult:self.fetchResult];
+    vc.pageIndex = indexPath.item;
+    vc.picker = self.picker;
     
-    if ([self.picker.delegate respondsToSelector:@selector(assetsPickerController:didSelectAsset:)])
-        [self.picker.delegate assetsPickerController:self.picker didSelectAsset:asset];
+    [self.navigationController pushViewController:vc animated:YES];
 }
 
 - (BOOL)collectionView:(UICollectionView *)collectionView shouldDeselectItemAtIndexPath:(NSIndexPath *)indexPath

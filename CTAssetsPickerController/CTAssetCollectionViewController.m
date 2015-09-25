@@ -156,12 +156,13 @@
                                      style:UIBarButtonItemStylePlain
                                     target:self.picker
                                     action:@selector(dismiss:)];
-
-    self.doneButton =
-    [[UIBarButtonItem alloc] initWithTitle:CTAssetsPickerLocalizedString(@"Done", nil)
-                                     style:UIBarButtonItemStyleDone
-                                    target:self.picker
-                                    action:@selector(finishPickingAssets:)];
+    
+    self.doneButton = nil;
+    // Removed for VHS
+    //    [[UIBarButtonItem alloc] initWithTitle:CTAssetsPickerLocalizedString(@"Done", nil)
+    //                                     style:UIBarButtonItemStyleDone
+    //                                    target:self.picker
+    //                                    action:@selector(finishPickingAssets:)];
 }
 
 - (void)localize
@@ -171,8 +172,8 @@
 
 - (void)setupFetchResults
 {
-    NSMutableArray *fetchResults = [NSMutableArray new];
-
+    NSMutableOrderedSet *fetchResults = [NSMutableOrderedSet new];
+    
     for (NSNumber *subtypeNumber in self.picker.assetCollectionSubtypes)
     {
         PHAssetCollectionType type       = [PHAssetCollection ctassetPickerAssetCollectionTypeOfSubtype:subtypeNumber.integerValue];
@@ -186,7 +187,7 @@
         [fetchResults addObject:fetchResult];
     }
     
-    self.fetchResults = [NSMutableArray arrayWithArray:fetchResults];
+    self.fetchResults = [fetchResults array];
     
     [self updateAssetCollections];
     [self reloadData];
@@ -195,7 +196,8 @@
 
 - (void)updateAssetCollections
 {
-    NSMutableArray *assetCollections = [NSMutableArray new];
+    NSMutableOrderedSet *assetCollections = [NSMutableOrderedSet new];
+    NSMutableArray *assetsCountInCollections = [NSMutableArray new];
     
     for (PHFetchResult *fetchResult in self.fetchResults)
     {
@@ -203,12 +205,25 @@
         {
             NSInteger count = [assetCollection ctassetPikcerCountOfAssetsFetchedWithOptions:self.picker.assetsFetchOptions];
             
-            if (self.picker.showsEmptyAlbums || count > 0)
+            if (self.picker.showsEmptyAlbums || count > 0) {
                 [assetCollections addObject:assetCollection];
+                [assetsCountInCollections addObject:@(count)];
+            }
         }
     }
-
-    self.assetCollections = [NSMutableArray arrayWithArray:assetCollections];
+    
+    if (self.picker.sortAlbumsWithAssetsCount)
+    {
+        self.assetCollections = [assetCollections sortedArrayUsingComparator:^NSComparisonResult(id first, id second)
+                                 {
+                                     NSNumber *firstNumber   = [assetsCountInCollections objectAtIndex:[assetCollections indexOfObject:first]];
+                                     NSNumber *secondNumber = [assetsCountInCollections objectAtIndex:[assetCollections indexOfObject:second]];
+                                     return [secondNumber compare:firstNumber];
+                                 }];
+    }
+    else {
+        self.assetCollections = [assetCollections array];
+    }
 }
 
 - (void)setupDefaultAssetCollection
@@ -349,7 +364,7 @@
 - (void)resetTitle
 {
     if (!self.picker.title)
-        self.title = CTAssetsPickerLocalizedString(@"Photos", nil);
+        self.title = CTAssetsPickerLocalizedString(@"Albums", nil); // TODO: Localization
     else
         self.title = self.picker.title;
 }

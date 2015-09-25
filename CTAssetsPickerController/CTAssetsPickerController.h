@@ -120,6 +120,14 @@
 @property (nonatomic, assign) BOOL alwaysEnableDoneButton;
 
 /**
+ *  Determines whether should sort albums depending on assets count.
+ *
+ *  Default value is `NO`.
+ */
+
+@property (nonatomic, assign) BOOL sortAlbumsWithAssetsCount;
+
+/**
  *  The split view controller of the picker hierarchy. (read-only)
  *
  *  This property contains the child split view controller of the picker.

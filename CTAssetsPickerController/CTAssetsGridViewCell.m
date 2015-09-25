@@ -75,36 +75,38 @@
 {
     CTAssetThumbnailView *thumbnailView = [CTAssetThumbnailView newAutoLayoutView];
     self.backgroundView = thumbnailView;
+    //  Removed for VHS
+    // Cause huge lags on scrolling should be improved
     
-    UIImage *disabledImage = [UIImage ctassetsPickerImageNamed:@"GridDisabledAsset"];
-    disabledImage = [disabledImage imageWithRenderingMode:UIImageRenderingModeAlwaysTemplate];
-    UIImageView *disabledImageView = [[UIImageView alloc] initWithImage:disabledImage];
-    disabledImageView.tintColor = CTAssetsPikcerThumbnailTintColor;
-    self.disabledImageView = disabledImageView;
+    //    UIImage *disabledImage = [UIImage ctassetsPickerImageNamed:@"GridDisabledAsset"];
+    //    disabledImage = [disabledImage imageWithRenderingMode:UIImageRenderingModeAlwaysTemplate];
+    //    UIImageView *disabledImageView = [[UIImageView alloc] initWithImage:disabledImage];
+    //    disabledImageView.tintColor = CTAssetsPikcerThumbnailTintColor;
+    //    self.disabledImageView = disabledImageView;
+    //
+    //
+    //    UIView *disabledView = [UIView newAutoLayoutView];
+    //    disabledView.backgroundColor = [UIColor colorWithWhite:1 alpha:0.8];
+    //    disabledView.hidden = YES;
+    //    [disabledView addSubview:self.disabledImageView];
+    //    self.disabledView = disabledView;
+    //    [self addSubview:self.disabledView];
+    //
+    //    UIView *highlightedView = [UIView newAutoLayoutView];
+    //    highlightedView.backgroundColor = [UIColor colorWithWhite:0 alpha:0.5];
+    //    highlightedView.hidden = YES;
+    //    self.highlightedView = highlightedView;
+    //    [self addSubview:self.highlightedView];
     
-    
-    UIView *disabledView = [UIView newAutoLayoutView];
-    disabledView.backgroundColor = [UIColor colorWithWhite:1 alpha:0.8];
-    disabledView.hidden = YES;
-    [disabledView addSubview:self.disabledImageView];
-    self.disabledView = disabledView;
-    [self addSubview:self.disabledView];
-    
-    UIView *highlightedView = [UIView newAutoLayoutView];
-    highlightedView.backgroundColor = [UIColor colorWithWhite:0 alpha:0.5];
-    highlightedView.hidden = YES;
-    self.highlightedView = highlightedView;
-    [self addSubview:self.highlightedView];
-    
-    CTAssetCheckmark *checkmark = [CTAssetCheckmark newAutoLayoutView];
-    self.checkmark = checkmark;
-    
-    UIView *selectedView = [UIView newAutoLayoutView];
-    selectedView.backgroundColor = [UIColor colorWithWhite:1 alpha:0.3];
-    selectedView.hidden = YES;
-    [selectedView addSubview:checkmark];
-    self.selectedView = selectedView;
-    [self addSubview:self.selectedView];
+    //    CTAssetCheckmark *checkmark = [CTAssetCheckmark newAutoLayoutView];
+    //    self.checkmark = checkmark;
+    //
+    //    UIView *selectedView = [UIView newAutoLayoutView];
+    //    selectedView.backgroundColor = [UIColor colorWithWhite:1 alpha:0.3];
+    //    selectedView.hidden = YES;
+    //    [selectedView addSubview:checkmark];
+    //    self.selectedView = selectedView;
+    //    [self addSubview:self.selectedView];
 }
 
 
@@ -120,17 +122,35 @@
 - (void)setHighlighted:(BOOL)highlighted
 {
     [super setHighlighted:highlighted];
-    self.highlightedView.hidden = !highlighted;
+    //  Removed for VHS
+    //    self.highlightedView.hidden = !highlighted;
+    if (highlighted) {
+        self.backgroundView.alpha = 0.5;
+    } else {
+        self.backgroundView.alpha = 1.0;
+    }
 }
 
 - (void)setSelected:(BOOL)selected
 {
     [super setSelected:selected];
     self.selectedView.hidden = !selected;
+    //  Removed for VHS
+    //TODO: Uncomment for selection
+    //    if (selected) {
+    //        CTAssetCheckmark *checkmark = [CTAssetCheckmark newAutoLayoutView];
+    //        self.checkmark = checkmark;
+    //
+    //        UIView *selectedView = [UIView newAutoLayoutView];
+    //        selectedView.backgroundColor = [UIColor colorWithWhite:1 alpha:0.3];
+    //        selectedView.hidden = YES;
+    //        [selectedView addSubview:checkmark];
+    //        self.selectedView = selectedView;
+    //        [self addSubview:self.selectedView];
+    //    } else {
+    //        [self.selectedView removeFromSuperview];
+    //    }
 }
-
-
-
 
 #pragma mark - Update auto layout constraints
 

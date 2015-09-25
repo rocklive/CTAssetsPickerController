@@ -89,6 +89,13 @@
     [super viewDidLoad];
     [self setupViews];
     [self addNotificationObserver];
+    
+    //  Changed for VHS
+    self.navigationItem.rightBarButtonItem =
+    [[UIBarButtonItem alloc] initWithTitle:CTAssetsPickerLocalizedString(@"Done", nil)
+                                     style:UIBarButtonItemStyleDone
+                                    target:self
+                                    action:@selector(pickCurrentAsset:)];
 }
 
 - (void)dealloc
@@ -104,6 +111,14 @@
         return self.isStatusBarHidden;
 }
 
+#pragma mark - Actions
+
+- (void)pickCurrentAsset:(id)sender{
+    //  Changed for VHS
+    CTAssetItemViewController *vc = (CTAssetItemViewController *)self.viewControllers[0];
+    [vc pauseAsset:nil];
+    [self.picker selectAsset:vc.asset];
+}
 
 
 #pragma mark - Setup

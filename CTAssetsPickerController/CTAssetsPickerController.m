@@ -57,9 +57,9 @@ NSString * const CTAssetsPickerDidDeselectAssetNotification = @"CTAssetsPickerDi
 
 @property (nonatomic, strong) PHImageRequestOptions *thumbnailRequestOptions;
 
+@property (assign, nonatomic) BOOL statusBarShouldBeHidden;
+
 @end
-
-
 
 @implementation CTAssetsPickerController
 
@@ -102,11 +102,19 @@ NSString * const CTAssetsPickerDidDeselectAssetNotification = @"CTAssetsPickerDi
 
 - (UIViewController *)childViewControllerForStatusBarStyle
 {
+    if (_statusBarShouldBeHidden) {
+        return nil;
+    }
+    
     return self.childSplitViewController.viewControllers.firstObject;
 }
 
 - (UIViewController *)childViewControllerForStatusBarHidden
 {
+    if (_statusBarShouldBeHidden) {
+        return nil;
+    }
+    
     UIViewController *vc = self.childSplitViewController.viewControllers.lastObject;
     
     if ([vc isMemberOfClass:[UINavigationController class]])
@@ -115,6 +123,16 @@ NSString * const CTAssetsPickerDidDeselectAssetNotification = @"CTAssetsPickerDi
         return nil;
 }
 
+- (BOOL)prefersStatusBarHidden{
+    return _statusBarShouldBeHidden;
+}
+
+- (void)dismissViewControllerAnimated:(BOOL)flag completion:(void (^)(void))completion {
+    //  Changed for VHS
+    self.statusBarShouldBeHidden = self.presentingViewController.prefersStatusBarHidden;
+    
+    [super dismissViewControllerAnimated:flag completion:completion];
+}
 
 
 #pragma mark - Init properties
@@ -132,7 +150,7 @@ NSString * const CTAssetsPickerDidDeselectAssetNotification = @"CTAssetsPickerDi
       [NSNumber numberWithInt:PHAssetCollectionSubtypeSmartAlbumTimelapses],
       [NSNumber numberWithInt:PHAssetCollectionSubtypeSmartAlbumBursts],
       [NSNumber numberWithInt:PHAssetCollectionSubtypeSmartAlbumAllHidden],
-      [NSNumber numberWithInt:PHAssetCollectionSubtypeSmartAlbumGeneric],      
+      [NSNumber numberWithInt:PHAssetCollectionSubtypeSmartAlbumGeneric],
       [NSNumber numberWithInt:PHAssetCollectionSubtypeAlbumRegular],
       [NSNumber numberWithInt:PHAssetCollectionSubtypeAlbumSyncedAlbum],
       [NSNumber numberWithInt:PHAssetCollectionSubtypeAlbumSyncedEvent],
@@ -144,9 +162,10 @@ NSString * const CTAssetsPickerDidDeselectAssetNotification = @"CTAssetsPickerDi
 - (void)initThumbnailRequestOptions
 {
     PHImageRequestOptions *options = [[PHImageRequestOptions alloc] init];
-    options.resizeMode = PHImageRequestOptionsResizeModeExact;
-    options.deliveryMode = PHImageRequestOptionsDeliveryModeHighQualityFormat;
- 
+    //Changed for VHS
+    options.resizeMode = PHImageRequestOptionsResizeModeFast;
+    options.deliveryMode = PHImageRequestOptionsDeliveryModeOpportunistic;
+    
     _thumbnailRequestOptions = options;
 }
 
@@ -356,15 +375,17 @@ NSString * const CTAssetsPickerDidDeselectAssetNotification = @"CTAssetsPickerDi
 
 - (void)addKeyValueObserver
 {
-    [self addObserver:self
-           forKeyPath:@"selectedAssets"
-              options:NSKeyValueObservingOptionNew | NSKeyValueObservingOptionOld
-              context:nil];
+    //  Removed for VHS
+    //    [self addObserver:self
+    //           forKeyPath:@"selectedAssets"
+    //              options:NSKeyValueObservingOptionNew | NSKeyValueObservingOptionOld
+    //              context:nil];
 }
 
 - (void)removeKeyValueObserver
 {
-    [self removeObserver:self forKeyPath:@"selectedAssets"];
+    //  Removed for VHS
+    //    [self removeObserver:self forKeyPath:@"selectedAssets"];
 }
 
 
@@ -459,6 +480,8 @@ NSString * const CTAssetsPickerDidDeselectAssetNotification = @"CTAssetsPickerDi
 {
     [self insertObject:asset inSelectedAssetsAtIndex:self.countOfSelectedAssets];
     [self postDidSelectAssetNotification:asset];
+    //  Chnaged for VHS
+    [self finishPickingAssets:nil];
 }
 
 - (void)deselectAsset:(PHAsset *)asset
@@ -563,6 +586,15 @@ NSString * const CTAssetsPickerDidDeselectAssetNotification = @"CTAssetsPickerDi
 {
     if ([self.delegate respondsToSelector:@selector(assetsPickerController:didFinishPickingAssets:)])
         [self.delegate assetsPickerController:self didFinishPickingAssets:self.selectedAssets];
+}
+
+#pragma mark - private
+
+- (void)setStatusBarShouldBeHidden:(BOOL)statusBarShouldBeHidden{
+    if (_statusBarShouldBeHidden != statusBarShouldBeHidden) {
+        _statusBarShouldBeHidden = statusBarShouldBeHidden;
+        [self setNeedsStatusBarAppearanceUpdate];
+    }
 }
 
 

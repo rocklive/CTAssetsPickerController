@@ -26,7 +26,7 @@
 
 #import <UIKit/UIKit.h>
 #import <Photos/Photos.h>
-
+#import "CTAssetsPickerController.h"
 
 
 
@@ -41,6 +41,7 @@
  */
 @property (nonatomic, assign) NSInteger pageIndex;
 
+@property (weak, nonatomic) CTAssetsPickerController *picker;
 
 /**
  *  @name Creating a Assets Page View Controller
