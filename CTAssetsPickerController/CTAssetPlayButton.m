@@ -96,7 +96,7 @@
     self.vibrancyView = vibrancyView;
     
     UIView *vibrancyFill = [UIView newAutoLayoutView];
-    vibrancyFill.backgroundColor = [UIColor whiteColor];
+    vibrancyFill.backgroundColor = [UIColor clearColor];
     vibrancyFill.userInteractionEnabled = NO;
     self.vibrancyFill = vibrancyFill;
     
