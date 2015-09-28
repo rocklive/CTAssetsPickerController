@@ -167,7 +167,10 @@
                                   self.image = image;
                                   
                                   dispatch_async(dispatch_get_main_queue(), ^{
-                                  
+                                      
+                                      if ([[info objectForKey:PHImageCancelledKey] boolValue])
+                                          return;
+                                      
                                       NSError *error = [info objectForKey:PHImageErrorKey];
                                       
                                       if (error)
