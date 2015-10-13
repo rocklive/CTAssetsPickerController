@@ -294,6 +294,12 @@ NSString * const CTAssetsGridViewFooterIdentifier = @"CTAssetsGridViewFooterIden
             
             UICollectionView *collectionView = self.collectionView;
             
+            [collectionView reloadData];
+            [self resetCachedAssetImages];
+            
+            // Disabled animated collection layout due to a possible issues
+            
+            /*
             if (![changeDetails hasIncrementalChanges] || [changeDetails hasMoves])
             {
                 [collectionView reloadData];
@@ -325,6 +331,7 @@ NSString * const CTAssetsGridViewFooterIdentifier = @"CTAssetsGridViewFooterIden
                         [self resetCachedAssetImages];
                 }];
             }
+             */
             
             [self.footer bind:self.fetchResult];
             
