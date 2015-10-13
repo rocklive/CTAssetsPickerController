@@ -63,6 +63,8 @@
         CTAssetItemViewController *iVC      = (CTAssetItemViewController *)toVC.viewControllers[0];
         NSIndexPath *indexPath              = [NSIndexPath indexPathForItem:toVC.pageIndex inSection:0];
         
+        toVC.view.frame         = [transitionContext finalFrameForViewController:toVC];
+        
         UIView *cellView        = [fromVC.collectionView cellForItemAtIndexPath:indexPath];
         UIImageView *imageView  = [[UIImageView alloc] initWithImage:iVC.image];
         UIView *snapshot        = [self resizedSnapshot:imageView];
@@ -99,8 +101,7 @@
         snapshot.transform  = CGAffineTransformMakeScale(startScale, startScale);;
         snapshot.layer.mask = mask.layer;
         snapshot.center     = cellCenter;
-        
-        toVC.view.frame     = [transitionContext finalFrameForViewController:toVC];
+    
         toVC.view.alpha     = 0;
         
         // Add to container view
