@@ -98,6 +98,11 @@
                                     action:@selector(pickCurrentAsset:)];
 }
 
+- (void)viewWillDisappear:(BOOL)animated {
+    [super viewWillDisappear:animated];
+    [self.navigationController setToolbarHidden:YES animated:NO];
+}
+
 - (void)dealloc
 {
     [self removeNotificationObserver];
