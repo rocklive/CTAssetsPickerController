@@ -48,6 +48,9 @@
 @property (nonatomic, strong) UIBarButtonItem *playButton;
 @property (nonatomic, strong) UIBarButtonItem *pauseButton;
 
+@property (nonatomic, strong) UIColor * whiteColor;
+@property (nonatomic, strong) UIColor * blackColor;
+
 @end
 
 
@@ -130,7 +133,15 @@
 
 - (void)setupViews
 {
-    self.view.backgroundColor = [UIColor whiteColor];
+    if (UI_USER_INTERFACE_IDIOM() == UIUserInterfaceIdiomPad) {
+        self.whiteColor = [UIColor whiteColor];
+        self.blackColor = self.whiteColor;
+    } else {
+        self.whiteColor = [UIColor whiteColor];
+        self.blackColor = [UIColor blackColor];
+    }
+    
+    self.view.backgroundColor = self.whiteColor;
 }
 
 - (void)setupButtons
@@ -342,7 +353,7 @@
     
     [UIView animateWithDuration:0.2
                      animations:^{
-                         self.view.backgroundColor = [UIColor whiteColor];
+                         self.view.backgroundColor = self.whiteColor;
                      }];
     
     [self fadeInControls:self.navigationController];
@@ -354,7 +365,7 @@
     
     [UIView animateWithDuration:0.2
                      animations:^{
-                         self.view.backgroundColor = [UIColor blackColor];
+                         self.view.backgroundColor = self.blackColor;
                      }];
     
     [self fadeAwayControls:self.navigationController];
@@ -370,8 +381,7 @@
 
 - (void)toogleBackgroundColor:(id)sender
 {
-    UIColor *color = (self.view.backgroundColor == UIColor.whiteColor) ?
-    [UIColor blackColor] : [UIColor whiteColor];
+    UIColor *color = ([self.view.backgroundColor isEqual: self.whiteColor]) ? self.blackColor : self.whiteColor;
     
     [UIView animateWithDuration:0.2
                      animations:^{
