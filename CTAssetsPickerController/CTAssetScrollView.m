@@ -112,6 +112,7 @@ NSString * const CTAssetScrollViewPlayerWillPauseNotification = @"CTAssetScrollV
     UIProgressView *progressView =
     [[UIProgressView alloc] initWithProgressViewStyle:UIProgressViewStyleDefault];
     self.progressView = progressView;
+    self.progressView.hidden = YES; // hide progressView for VHSIOS-198
     
     [self addSubview:self.progressView];
     
@@ -210,30 +211,32 @@ NSString * const CTAssetScrollViewPlayerWillPauseNotification = @"CTAssetScrollV
 
 - (void)setProgress:(CGFloat)progress
 {
-    [[UIApplication sharedApplication] setNetworkActivityIndicatorVisible:(progress < 1)];
-    [self.progressView setProgress:progress animated:(progress < 1)];
-    [self.progressView setHidden:(progress == 1)];
+// hide progressView for VHSIOS-198
+//    [[UIApplication sharedApplication] setNetworkActivityIndicatorVisible:(progress < 1)];
+//    [self.progressView setProgress:progress animated:(progress < 1)];
+//    [self.progressView setHidden:(progress == 1)];
 }
 
 // To mimic image downloading progress
 // as PHImageRequestOptions does not work as expected
 - (void)mimicProgress
 {
-    CGFloat progress = self.progressView.progress;
-
-    if (progress < 0.95)
-    {
-        int lowerbound = progress * 100 + 1;
-        int upperbound = 95;
-        
-        int random = lowerbound + arc4random() % (upperbound - lowerbound);
-        CGFloat randomProgress = random / 100.0f;
-
-        [self setProgress:randomProgress];
-        
-        NSInteger randomDelay = 1 + arc4random() % (3 - 1);
-        [self performSelector:@selector(mimicProgress) withObject:nil afterDelay:randomDelay];
-    }
+// hide progressView for VHSIOS-198
+//    CGFloat progress = self.progressView.progress;
+//
+//    if (progress < 0.95)
+//    {
+//        int lowerbound = progress * 100 + 1;
+//        int upperbound = 95;
+//        
+//        int random = lowerbound + arc4random() % (upperbound - lowerbound);
+//        CGFloat randomProgress = random / 100.0f;
+//
+//        [self setProgress:randomProgress];
+//        
+//        NSInteger randomDelay = 1 + arc4random() % (3 - 1);
+//        [self performSelector:@selector(mimicProgress) withObject:nil afterDelay:randomDelay];
+//    }
 }
 
 
